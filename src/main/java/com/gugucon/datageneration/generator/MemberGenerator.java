@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-public class MemberGenerator implements Generator<Member> {
+public class MemberGenerator {
 
     private static final int DOMAIN_MIN_LENGTH = 5;
     private static final int DOMAIN_MAX_LENGTH = 8;
@@ -26,8 +26,6 @@ public class MemberGenerator implements Generator<Member> {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
     private final Random random = new Random();
-
-    @Override
     public List<Member> generate(final int number) {
         return IntStream.range(0, number)
                         .mapToObj(i -> Member.builder()
