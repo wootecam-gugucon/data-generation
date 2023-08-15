@@ -1,4 +1,4 @@
-package com.gugucon.datageneration;
+package com.gugucon.datageneration.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

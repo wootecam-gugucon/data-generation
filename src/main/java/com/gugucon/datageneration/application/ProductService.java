@@ -1,5 +1,8 @@
-package com.gugucon.datageneration;
+package com.gugucon.datageneration.application;
 
+import com.gugucon.datageneration.infrastructure.CSVReader;
+import com.gugucon.datageneration.repository.ProductRepository;
+import com.gugucon.datageneration.domain.Product;
 import java.util.List;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,9 @@
-package com.gugucon.datageneration;
+package com.gugucon.datageneration.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.gugucon.datageneration.application.ProductService;
+import com.gugucon.datageneration.repository.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

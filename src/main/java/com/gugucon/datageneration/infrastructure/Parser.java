@@ -1,4 +1,4 @@
-package com.gugucon.datageneration;
+package com.gugucon.datageneration.infrastructure;
 
 public interface Parser<T> {
 

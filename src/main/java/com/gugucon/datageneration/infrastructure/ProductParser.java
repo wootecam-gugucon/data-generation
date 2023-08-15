@@ -1,5 +1,6 @@
-package com.gugucon.datageneration;
+package com.gugucon.datageneration.infrastructure;
 
+import com.gugucon.datageneration.domain.Product;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;

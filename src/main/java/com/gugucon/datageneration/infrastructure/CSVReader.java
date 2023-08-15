@@ -1,4 +1,4 @@
-package com.gugucon.datageneration;
+package com.gugucon.datageneration.infrastructure;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
