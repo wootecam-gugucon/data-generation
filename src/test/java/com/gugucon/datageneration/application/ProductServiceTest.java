@@ -21,7 +21,7 @@ class ProductServiceTest {
     void createData() {
         productRepository.deleteAll();
         String path = "/Users/woowatech1/Downloads/train.csv";
-        int count = productService.createData(path);
+        int count = productService.createData(path, 10000);
         assertThat(productRepository.count()).isEqualTo(count);
     }
 
