@@ -1,8 +1,8 @@
 package com.gugucon.datageneration.config;
 
+import com.gugucon.datageneration.domain.Product;
 import com.gugucon.datageneration.infrastructure.CSVReader;
 import com.gugucon.datageneration.infrastructure.ProductParser;
-import com.gugucon.datageneration.domain.Product;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

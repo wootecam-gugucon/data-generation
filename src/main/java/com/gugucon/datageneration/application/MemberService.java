@@ -15,7 +15,7 @@ public class MemberService {
     private final MemberGenerator memberGenerator;
 
     public int createMember(final int number) {
-        List<Member> members = memberGenerator.generate(number);
+        final List<Member> members = memberGenerator.generate(number);
         memberRepository.saveAll(members);
         return members.size();
     }

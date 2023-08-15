@@ -26,6 +26,7 @@ public class MemberGenerator {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
 
     private final Random random = new Random();
+
     public List<Member> generate(final int number) {
         return IntStream.range(0, number)
                         .mapToObj(i -> Member.builder()

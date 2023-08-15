@@ -18,14 +18,22 @@ class MemberServiceTest {
 
     @Test
     void createMember() {
+        // given
         memberRepository.deleteAll();
+
+        // when
         int count = memberService.createMember(1000);
+
+        // then
         assertThat(memberRepository.count()).isEqualTo(count);
     }
 
     @Test
     void deleteAll() {
+        // when
         memberRepository.deleteAll();
+
+        // then
         assertThat(memberRepository.count()).isZero();
     }
 }
