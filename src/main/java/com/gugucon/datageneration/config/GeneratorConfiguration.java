@@ -4,11 +4,17 @@ import com.gugucon.datageneration.generator.CartItemGenerator;
 import com.gugucon.datageneration.generator.MemberGenerator;
 import com.gugucon.datageneration.generator.OrderGenerator;
 import com.gugucon.datageneration.generator.PayGenerator;
+import com.gugucon.datageneration.generator.ProductGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GeneratorConfiguration {
+
+    @Bean
+    public ProductGenerator productGenerator() {
+        return new ProductGenerator();
+    }
 
     @Bean
     public MemberGenerator memberGenerator() {

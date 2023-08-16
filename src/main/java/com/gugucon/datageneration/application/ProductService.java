@@ -1,6 +1,7 @@
 package com.gugucon.datageneration.application;
 
 import com.gugucon.datageneration.domain.Product;
+import com.gugucon.datageneration.generator.ProductGenerator;
 import com.gugucon.datageneration.infrastructure.CSVReader;
 import com.gugucon.datageneration.repository.ProductRepository;
 import java.util.List;
@@ -14,12 +15,14 @@ import org.springframework.stereotype.Service;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CSVReader<Product> csvReader;
-    private final Logger log = LoggerFactory.getLogger(ProductService.class);
+    //private final CSVReader<Product> csvReader;
+    private final ProductGenerator productGenerator;
+    //private final Logger log = LoggerFactory.getLogger(ProductService.class);
 
     public int createData(final String path, final int number) {
-        final List<Product> products = csvReader.readCSV(path, number);
-        log.info("파싱 완료");
+        //final List<Product> products = csvReader.readCSV(path, number);
+        //log.info("파싱 완료");
+        final List<Product> products = productGenerator.generate(number);
         products.stream()
                 .parallel()
                 .forEach(productRepository::save);
