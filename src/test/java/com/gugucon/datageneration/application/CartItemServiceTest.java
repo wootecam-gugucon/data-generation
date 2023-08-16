@@ -8,8 +8,6 @@ import com.gugucon.datageneration.repository.CartItemRepository;
 import com.gugucon.datageneration.repository.MemberRepository;
 import com.gugucon.datageneration.repository.ProductRepository;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,13 +34,13 @@ class CartItemServiceTest {
     private ProductRepository productRepository;
 
     @Test
-    void createCartItem() {
+    void createCartItems() {
         // given
         cartItemRepository.deleteAll();
 
         productRepository.deleteAll();
         String path = "/Users/woowatech1/Downloads/train.csv";
-        int productCount = productService.createData(path, 10000);
+        productService.createData(path, 10000);
         List<Long> productIds = productRepository.findAll()
                                                  .stream()
                                                  .map(Product::getId)
@@ -55,18 +53,8 @@ class CartItemServiceTest {
                                                .map(Member::getId)
                                                .toList();
 
-        Random random = new Random();
-
         // when
-        int count = memberIds.stream()
-                             .mapToInt(memberId ->
-                                               IntStream.range(0, 5)
-                                                        .map(i -> {
-                                                            Long productId = productIds.get(random.nextInt(productCount));
-                                                            return cartItemService.createCartItem(memberId, productId);
-                                                        })
-                                                        .sum())
-                             .sum();
+        int count = cartItemService.createCartItems(memberIds, productIds, 5000);
 
         // then
         assertThat(cartItemRepository.count()).isEqualTo(count);

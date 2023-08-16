@@ -20,7 +20,9 @@ public class ProductService {
     public int createData(final String path, final int number) {
         final List<Product> products = csvReader.readCSV(path, number);
         log.info("파싱 완료");
-        productRepository.saveAll(products);
+        products.stream()
+                .parallel()
+                .forEach(productRepository::save);
         return products.size();
     }
 }
