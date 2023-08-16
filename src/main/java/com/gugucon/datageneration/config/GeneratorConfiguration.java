@@ -3,6 +3,7 @@ package com.gugucon.datageneration.config;
 import com.gugucon.datageneration.generator.CartItemGenerator;
 import com.gugucon.datageneration.generator.MemberGenerator;
 import com.gugucon.datageneration.generator.OrderGenerator;
+import com.gugucon.datageneration.generator.PayGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,5 +23,10 @@ public class GeneratorConfiguration {
     @Bean
     public OrderGenerator orderGenerator() {
         return new OrderGenerator();
+    }
+
+    @Bean
+    public PayGenerator payGenerator() {
+        return new PayGenerator();
     }
 }

@@ -3,10 +3,13 @@ package com.gugucon.datageneration.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gugucon.datageneration.domain.Member;
+import com.gugucon.datageneration.domain.Order;
+import com.gugucon.datageneration.domain.OrderItem;
 import com.gugucon.datageneration.domain.Product;
 import com.gugucon.datageneration.repository.MemberRepository;
 import com.gugucon.datageneration.repository.OrderItemRepository;
 import com.gugucon.datageneration.repository.OrderRepository;
+import com.gugucon.datageneration.repository.PayRepository;
 import com.gugucon.datageneration.repository.ProductRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -14,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OrderServiceTest {
+class PayServiceTest {
+
+    @Autowired
+    private PayService payService;
 
     @Autowired
     private OrderService orderService;
@@ -24,6 +30,9 @@ class OrderServiceTest {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private PayRepository payRepository;
 
     @Autowired
     private OrderRepository orderRepository;
@@ -40,6 +49,7 @@ class OrderServiceTest {
     @Test
     void createCartItems() {
         // given
+        payRepository.deleteAll();
         orderRepository.deleteAll();
         orderItemRepository.deleteAll();
         productRepository.deleteAll();
@@ -55,24 +65,32 @@ class OrderServiceTest {
                                                .map(Member::getId)
                                                .toList();
 
+        orderService.createOrder(memberIds, products, 1000);
+        List<Long> payedOrderIds = orderRepository.findAllByStatus("PAYED")
+                                                  .stream()
+                                                  .map(Order::getId)
+                                                  .toList();
+
+        List<Long> totalPrices = payedOrderIds.stream()
+                                              .map(id -> orderItemRepository.findAllByOrderId(id)
+                                                                            .stream()
+                                                                            .mapToLong(OrderItem::getPrice)
+                                                                            .sum())
+                                              .toList();
+
         // when
-        int orderCount = 1000;
-        int count = orderService.createOrder(memberIds, products, orderCount);
+        int count = payService.createPay(payedOrderIds, totalPrices);
 
         // then
-        assertThat(orderRepository.count()).isEqualTo(orderCount);
-        assertThat(orderItemRepository.count()).isEqualTo(count);
+        assertThat(payRepository.count()).isEqualTo(count);
     }
 
     @Test
     void deleteAll() {
         // when
-        orderRepository.deleteAll();
-        orderItemRepository.deleteAll();
+        payRepository.deleteAll();
 
         // then
-        assertThat(orderRepository.count()).isZero();
-        assertThat(orderItemRepository.count()).isZero();
+        assertThat(payRepository.count()).isZero();
     }
-
 }
