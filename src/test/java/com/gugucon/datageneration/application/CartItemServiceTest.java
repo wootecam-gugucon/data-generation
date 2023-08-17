@@ -39,8 +39,7 @@ class CartItemServiceTest {
         cartItemRepository.deleteAll();
 
         productRepository.deleteAll();
-        String path = "/Users/woowatech1/Downloads/train.csv";
-        productService.createData(path, 10000);
+        productService.createProduct(10000);
         List<Long> productIds = productRepository.findAll()
                                                  .stream()
                                                  .map(Product::getId)

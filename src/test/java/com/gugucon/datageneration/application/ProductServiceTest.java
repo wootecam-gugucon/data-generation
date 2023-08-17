@@ -17,13 +17,12 @@ class ProductServiceTest {
     private ProductService productService;
 
     @Test
-    void createData() {
+    void createProduct() {
         // given
         productRepository.deleteAll();
-        String path = "/Users/woowatech1/Downloads/train.csv";
 
         // when
-        int count = productService.createData(path, 10000);
+        int count = productService.createProduct(10000);
 
         // then
         assertThat(productRepository.count()).isEqualTo(count);

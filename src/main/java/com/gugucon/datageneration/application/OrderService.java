@@ -18,9 +18,7 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderGenerator orderGenerator;
 
-    public int createOrder(final List<Long> memberIds,
-                           final List<Product> products,
-                           final int orderCount) {
+    public int createOrder(final List<Long> memberIds, final List<Product> products, final int orderCount) {
         List<Order> orders = orderGenerator.generateOrder(memberIds, orderCount);
         List<Long> orderIds = orders.stream()
                                     .parallel()

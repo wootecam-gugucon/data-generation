@@ -47,7 +47,7 @@ class PayServiceTest {
     private ProductRepository productRepository;
 
     @Test
-    void createCartItems() {
+    void createPay() {
         // given
         payRepository.deleteAll();
         orderRepository.deleteAll();
@@ -55,8 +55,7 @@ class PayServiceTest {
         productRepository.deleteAll();
         memberRepository.deleteAll();
 
-        String path = "/Users/woowatech1/Downloads/train.csv";
-        productService.createData(path, 10000);
+        productService.createProduct(10000);
         List<Product> products = productRepository.findAll();
 
         memberService.createMember(1000);
