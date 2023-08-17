@@ -1,6 +1,5 @@
 package com.gugucon.datageneration.generator;
 
-import com.gugucon.datageneration.domain.Member;
 import com.gugucon.datageneration.domain.Product;
 import com.gugucon.datageneration.utils.RandomStringUtils;
 import java.util.List;
@@ -17,7 +16,8 @@ public class ProductGenerator {
                                                     "하늘색", "살구색", "회색", "짙은 회색", "그레이", "다크그레이", "네이비", "남보라", "남색",
                                                     "어두운", "머스타드", "레트로한", "빈티지", "데이트룩", "남친룩", "여친룩", "어려 보이는",
                                                     "데일리룩", "코지", "꾸안꾸", "편안한", "가성비 좋은", "가성비 갑", "따뜻한", "새내기룩",
-                                                    "다리가 길어보이는", "하객룩");
+                                                    "다리가 길어보이는", "하객룩", "댄디한", "빈티지한", "소프트한", "쿨톤", "웜톤", "주황",
+                                                    "새파란", "글루미", "패셔너블", "심플한", "힙한", "가벼운", "하이틴", "시그니처", "쿨한");
 
     private final List<String> categories = List.of("세트", "정장", "턱시도", "연미복", "프록 코트", "유니폼", "교복", "군복",
                                                   "제복", "정복", "근무복", "학교 체육복", "수영복", "비키니", "래시가드", "원피스",
