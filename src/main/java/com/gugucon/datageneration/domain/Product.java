@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
+@Table(name = "products")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -32,7 +33,6 @@ public class Product extends BaseTimeEntity {
 
     private Integer stock;
 
-    @Lob
-    @Column(length = 1000)
+    @Column(length = 1000, columnDefinition = "text")
     private String description;
 }

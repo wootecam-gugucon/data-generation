@@ -8,8 +8,6 @@ import com.gugucon.datageneration.application.OrderService;
 import com.gugucon.datageneration.application.PayService;
 import com.gugucon.datageneration.application.ProductService;
 import com.gugucon.datageneration.domain.Member;
-import com.gugucon.datageneration.domain.Order;
-import com.gugucon.datageneration.domain.OrderItem;
 import com.gugucon.datageneration.domain.Product;
 import com.gugucon.datageneration.repository.CartItemRepository;
 import com.gugucon.datageneration.repository.MemberRepository;
@@ -61,12 +59,12 @@ class DataGenerationApplicationTests {
     @Test
     void createAll() {
         // given
-        productRepository.deleteAll();
-        memberRepository.deleteAll();
-        cartItemRepository.deleteAll();
-        orderRepository.deleteAll();
-        orderItemRepository.deleteAll();
-        payRepository.deleteAll();
+        payRepository.deleteAllInBatch();
+        orderItemRepository.deleteAllInBatch();
+        cartItemRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
+        productRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
 
         int productCount = 10_000;
         int memberCount = 1_000;
@@ -89,16 +87,10 @@ class DataGenerationApplicationTests {
         cartItemService.createCartItems(memberIds, productIds, cartItemCount);
 
         orderService.createOrder(memberIds, products, orderCount);
-        List<Long> payedOrderIds = orderRepository.findAllByStatus("PAYED")
-                                                  .stream()
-                                                  .map(Order::getId)
-                                                  .toList();
+        List<Long> payedOrderIds = orderRepository.findAllIdByStatus("PAYED");
 
         List<Long> totalPrices = payedOrderIds.stream()
-                                              .map(id -> orderItemRepository.findAllByOrderId(id)
-                                                                            .stream()
-                                                                            .mapToLong(OrderItem::getPrice)
-                                                                            .sum())
+                                              .map(orderItemRepository::sumPriceByOrderId)
                                               .toList();
 
         int payCount = payService.createPay(payedOrderIds, totalPrices);
@@ -110,5 +102,4 @@ class DataGenerationApplicationTests {
         assertThat(orderRepository.count()).isEqualTo(orderCount);
         assertThat(payRepository.count()).isEqualTo(payCount);
     }
-
 }

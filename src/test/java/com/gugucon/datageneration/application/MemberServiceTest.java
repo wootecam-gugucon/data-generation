@@ -19,7 +19,7 @@ class MemberServiceTest {
     @Test
     void createMember() {
         // given
-        memberRepository.deleteAll();
+        memberRepository.deleteAllInBatch();
 
         // when
         int count = memberService.createMember(1000);
@@ -31,7 +31,7 @@ class MemberServiceTest {
     @Test
     void deleteAll() {
         // when
-        memberRepository.deleteAll();
+        memberRepository.deleteAllInBatch();
 
         // then
         assertThat(memberRepository.count()).isZero();

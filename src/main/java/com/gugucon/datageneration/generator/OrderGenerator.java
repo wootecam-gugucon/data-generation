@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 public class OrderGenerator {
 
     private static final int MIN_QUANTITY = 1;
-    private static final int MAX_QUANTITY = 1000;
+    private static final int MAX_QUANTITY = 10;
     private static final int MIN_ITEM = 1;
     private static final int MAX_ITEM = 5;
 

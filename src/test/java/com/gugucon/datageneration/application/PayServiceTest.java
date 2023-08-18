@@ -3,8 +3,6 @@ package com.gugucon.datageneration.application;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.gugucon.datageneration.domain.Member;
-import com.gugucon.datageneration.domain.Order;
-import com.gugucon.datageneration.domain.OrderItem;
 import com.gugucon.datageneration.domain.Product;
 import com.gugucon.datageneration.repository.MemberRepository;
 import com.gugucon.datageneration.repository.OrderItemRepository;
@@ -49,11 +47,11 @@ class PayServiceTest {
     @Test
     void createPay() {
         // given
-        payRepository.deleteAll();
-        orderRepository.deleteAll();
-        orderItemRepository.deleteAll();
-        productRepository.deleteAll();
-        memberRepository.deleteAll();
+        payRepository.deleteAllInBatch();
+        orderItemRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
+        productRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
 
         productService.createProduct(10000);
         List<Product> products = productRepository.findAll();
@@ -65,16 +63,10 @@ class PayServiceTest {
                                                .toList();
 
         orderService.createOrder(memberIds, products, 1000);
-        List<Long> payedOrderIds = orderRepository.findAllByStatus("PAYED")
-                                                  .stream()
-                                                  .map(Order::getId)
-                                                  .toList();
+        List<Long> payedOrderIds = orderRepository.findAllIdByStatus("PAYED");
 
         List<Long> totalPrices = payedOrderIds.stream()
-                                              .map(id -> orderItemRepository.findAllByOrderId(id)
-                                                                            .stream()
-                                                                            .mapToLong(OrderItem::getPrice)
-                                                                            .sum())
+                                              .map(orderItemRepository::sumPriceByOrderId)
                                               .toList();
 
         // when
@@ -87,7 +79,7 @@ class PayServiceTest {
     @Test
     void deleteAll() {
         // when
-        payRepository.deleteAll();
+        payRepository.deleteAllInBatch();
 
         // then
         assertThat(payRepository.count()).isZero();

@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 public class CartItemGenerator {
 
     private static final int MIN_QUANTITY = 1;
-    private static final int MAX_QUANTITY = 1000;
+    private static final int MAX_QUANTITY = 10;
 
     private final Random random = new Random();
 

@@ -20,18 +20,13 @@ public class OrderService {
 
     public int createOrder(final List<Long> memberIds, final List<Product> products, final int orderCount) {
         List<Order> orders = orderGenerator.generateOrder(memberIds, orderCount);
-        List<Long> orderIds = orders.stream()
-                                    .parallel()
-                                    .map(orderRepository::save)
-                                    .map(Order::getId)
-                                    .toList();
-        List<OrderItem> orderItems = orderIds.stream()
-                                             .flatMap(orderId -> orderGenerator.generateOrderItem(orderId, products)
-                                                                               .stream())
-                                             .toList();
-        orderItems.stream()
-                  .parallel()
-                  .forEach(orderItemRepository::save);
-        return orderItems.size();
+        orders.stream()
+              .parallel()
+              .forEach(orderRepository::save);
+        List<Long> orderIds = orderRepository.findAllId();
+        orderIds.stream()
+                .parallel()
+                .forEach(orderId -> orderGenerator.generateOrderItem(orderId, products).stream().parallel().forEach(orderItemRepository::save));
+        return orderIds.size();
     }
 }

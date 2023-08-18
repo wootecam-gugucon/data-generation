@@ -19,7 +19,7 @@ class ProductServiceTest {
     @Test
     void createProduct() {
         // given
-        productRepository.deleteAll();
+        productRepository.deleteAllInBatch();
 
         // when
         int count = productService.createProduct(10000);
@@ -31,7 +31,7 @@ class ProductServiceTest {
     @Test
     void deleteData() {
         // when
-        productRepository.deleteAll();
+        productRepository.deleteAllInBatch();
 
         // then
         assertThat(productRepository.count()).isZero();

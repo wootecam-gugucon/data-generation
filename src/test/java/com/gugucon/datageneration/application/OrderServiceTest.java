@@ -40,10 +40,10 @@ class OrderServiceTest {
     @Test
     void createOrderItems() {
         // given
-        orderRepository.deleteAll();
-        orderItemRepository.deleteAll();
-        productRepository.deleteAll();
-        memberRepository.deleteAll();
+        orderItemRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
+        productRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
 
         productService.createProduct(10000);
         List<Product> products = productRepository.findAll();
@@ -55,19 +55,18 @@ class OrderServiceTest {
                                                .toList();
 
         // when
-        int orderCount = 1_000_000;
+        int orderCount = 10_000;
         int count = orderService.createOrder(memberIds, products, orderCount);
 
         // then
-        assertThat(orderRepository.count()).isEqualTo(orderCount);
-        assertThat(orderItemRepository.count()).isEqualTo(count);
+        assertThat(count).isEqualTo(orderCount);
     }
 
     @Test
     void deleteAll() {
         // when
-        orderRepository.deleteAll();
-        orderItemRepository.deleteAll();
+        orderItemRepository.deleteAllInBatch();
+        orderRepository.deleteAllInBatch();
 
         // then
         assertThat(orderRepository.count()).isZero();

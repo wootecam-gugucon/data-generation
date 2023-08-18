@@ -41,7 +41,7 @@ public class ProductGenerator {
         return IntStream.range(0, number)
                         .mapToObj(i -> Product.builder()
                                               .name(nameGenerate())
-                                              .price(random.nextInt(100) * 1000L)
+                                              .price(random.nextInt(10, 100) * 1000L)
                                               .imageFileName("/default.jpg")
                                               .stock(random.nextInt(1000))
                                               .description(RandomStringUtils.randomAlphabetic(32))

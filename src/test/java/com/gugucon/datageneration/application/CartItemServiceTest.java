@@ -36,16 +36,16 @@ class CartItemServiceTest {
     @Test
     void createCartItems() {
         // given
-        cartItemRepository.deleteAll();
+        cartItemRepository.deleteAllInBatch();
+        productRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
 
-        productRepository.deleteAll();
         productService.createProduct(10000);
         List<Long> productIds = productRepository.findAll()
                                                  .stream()
                                                  .map(Product::getId)
                                                  .toList();
 
-        memberRepository.deleteAll();
         memberService.createMember(1000);
         List<Long> memberIds = memberRepository.findAll()
                                                .stream()
@@ -62,7 +62,7 @@ class CartItemServiceTest {
     @Test
     void deleteAll() {
         // when
-        cartItemRepository.deleteAll();
+        cartItemRepository.deleteAllInBatch();
 
         // then
         assertThat(cartItemRepository.count()).isZero();
