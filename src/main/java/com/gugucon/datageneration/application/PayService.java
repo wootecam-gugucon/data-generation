@@ -14,8 +14,8 @@ public class PayService {
     private final PayRepository payRepository;
     private final PayGenerator payGenerator;
 
-    public int createPay(final List<Long> orderIds, final List<Long> totalPrices) {
-        List<Pay> pays = payGenerator.generate(orderIds, totalPrices);
+    public int createPay(final List<Long> orderIds) {
+        List<Pay> pays = payGenerator.generate(orderIds);
         pays.stream()
             .parallel()
             .forEach(payRepository::save);

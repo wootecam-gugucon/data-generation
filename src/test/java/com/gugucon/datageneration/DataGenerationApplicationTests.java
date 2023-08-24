@@ -9,6 +9,7 @@ import com.gugucon.datageneration.application.PayService;
 import com.gugucon.datageneration.application.ProductService;
 import com.gugucon.datageneration.domain.Member;
 import com.gugucon.datageneration.domain.Product;
+import com.gugucon.datageneration.domain.Status;
 import com.gugucon.datageneration.repository.CartItemRepository;
 import com.gugucon.datageneration.repository.MemberRepository;
 import com.gugucon.datageneration.repository.OrderItemRepository;
@@ -87,13 +88,9 @@ class DataGenerationApplicationTests {
         cartItemService.createCartItems(memberIds, productIds, cartItemCount);
 
         orderService.createOrder(memberIds, products, orderCount);
-        List<Long> payedOrderIds = orderRepository.findAllIdByStatus("PAYED");
+        List<Long> payedOrderIds = orderRepository.findAllIdByStatus(Status.COMPLETED);
 
-        List<Long> totalPrices = payedOrderIds.stream()
-                                              .map(orderItemRepository::sumPriceByOrderId)
-                                              .toList();
-
-        int payCount = payService.createPay(payedOrderIds, totalPrices);
+        int payCount = payService.createPay(payedOrderIds);
 
         // then
         assertThat(productRepository.count()).isEqualTo(productCount);

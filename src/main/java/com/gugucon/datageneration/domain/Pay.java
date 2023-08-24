@@ -24,7 +24,5 @@ public final class Pay extends BaseTimeEntity {
     private Long id;
 
     private Long orderId;
-
-    private Long price;
 }
 

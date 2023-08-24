@@ -1,13 +1,19 @@
 package com.gugucon.datageneration.generator;
 
+import com.gugucon.datageneration.domain.Gender;
 import com.gugucon.datageneration.domain.Member;
 import com.gugucon.datageneration.utils.RandomStringUtils;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -26,25 +32,32 @@ public class MemberGenerator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     private static final String PASSWORD_REGEX = "^(?=.*[a-z]).{4,20}$";
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(PASSWORD_REGEX);
+    private static final LocalDate START_DATE = LocalDate.of(1950, 1, 1);
+    private static final LocalDate END_DATE = LocalDate.of(2010, 12, 31);
 
     private final Random random = new Random();
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public List<Member> generate(final int number) {
+        Gender[] gender = Gender.values();
+        long daysBetween = ChronoUnit.DAYS.between(START_DATE, END_DATE);
+
         return IntStream.range(0, number)
-                        .mapToObj(i -> Member.builder()
-                                             .email(emailGenerate())
-                                             .password(passwordEncoder.encode(passwordGenerate()))
-                                             .nickname(nicknameGenerate())
-                                             .build())
-                        .toList();
+                .mapToObj(i -> Member.builder()
+                        .email(emailGenerate())
+                        .password(passwordEncoder.encode(passwordGenerate()))
+                        .nickname(nicknameGenerate())
+                        .gender(gender[random.nextInt(gender.length)])
+                        .birthDate(START_DATE.plusDays(random.nextInt((int) daysBetween + 1)))
+                        .build())
+                .toList();
     }
 
     private String emailGenerate() {
         String id = LocalDateTime.now().toString().replaceAll("[-:.]", "");
         String domain = RandomStringUtils.randomAlphanumeric(random.nextInt(DOMAIN_MIN_LENGTH, DOMAIN_MAX_LENGTH));
         String tld = RandomStringUtils.randomAlphabetic(random.nextInt(PROVIDER_MIN_LENGTH, PROVIDER_MAX_LENGTH));
-        return validateEmail(id+"@"+domain+"."+tld);
+        return validateEmail(id + "@" + domain + "." + tld);
     }
 
     private String validateEmail(final String email) {

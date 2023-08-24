@@ -1,18 +1,16 @@
 package com.gugucon.datageneration.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.gugucon.datageneration.domain.Member;
 import com.gugucon.datageneration.domain.Product;
-import com.gugucon.datageneration.repository.MemberRepository;
-import com.gugucon.datageneration.repository.OrderItemRepository;
-import com.gugucon.datageneration.repository.OrderRepository;
-import com.gugucon.datageneration.repository.PayRepository;
-import com.gugucon.datageneration.repository.ProductRepository;
-import java.util.List;
+import com.gugucon.datageneration.domain.Status;
+import com.gugucon.datageneration.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class PayServiceTest {
@@ -63,14 +61,14 @@ class PayServiceTest {
                                                .toList();
 
         orderService.createOrder(memberIds, products, 1000);
-        List<Long> payedOrderIds = orderRepository.findAllIdByStatus("PAYED");
+        List<Long> payedOrderIds = orderRepository.findAllIdByStatus(Status.COMPLETED);
 
         List<Long> totalPrices = payedOrderIds.stream()
                                               .map(orderItemRepository::sumPriceByOrderId)
                                               .toList();
 
         // when
-        int count = payService.createPay(payedOrderIds, totalPrices);
+        int count = payService.createPay(payedOrderIds);
 
         // then
         assertThat(payRepository.count()).isEqualTo(count);
