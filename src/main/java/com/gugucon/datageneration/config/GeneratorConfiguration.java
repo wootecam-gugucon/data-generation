@@ -5,6 +5,7 @@ import com.gugucon.datageneration.generator.MemberGenerator;
 import com.gugucon.datageneration.generator.OrderGenerator;
 import com.gugucon.datageneration.generator.PayGenerator;
 import com.gugucon.datageneration.generator.ProductGenerator;
+import com.gugucon.datageneration.generator.RateGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,5 +35,10 @@ public class GeneratorConfiguration {
     @Bean
     public PayGenerator payGenerator() {
         return new PayGenerator();
+    }
+
+    @Bean
+    public RateGenerator rateGenerator() {
+        return new RateGenerator();
     }
 }
