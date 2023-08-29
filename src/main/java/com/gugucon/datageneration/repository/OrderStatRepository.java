@@ -20,6 +20,7 @@ public interface OrderStatRepository extends JpaRepository<OrderStat, Long> {
             "JOIN Product p ON p.id = oi.productId " +
             "WHERE m.birthDate between :startDate AND :endDate " +
             "AND m.gender = :gender " +
+            "AND o.status = 'COMPLETED' " +
             "GROUP BY p.id")
     List<SimpleOrderStatDto> findAllSimpleOrderStatByGenderAndBirthDateBetween(@Param("gender") final Gender gender,
                                                                                @Param("startDate") final LocalDate startDate,

@@ -21,6 +21,7 @@ public interface RateStatRepository extends JpaRepository<RateStat, Long> {
             "JOIN Product p ON p.id = oi.productId " +
             "WHERE m.birthDate between :startDate AND :endDate " +
             "AND m.gender = :gender " +
+            "AND o.status = 'COMPLETED' " +
             "GROUP BY p.id")
     List<SimpleRateStatDto> findAllSimpleRateStatByGenderAndBirthDateBetween(@Param("gender") final Gender gender,
                                                                              @Param("startDate") final LocalDate startDate,
