@@ -5,10 +5,12 @@ import com.gugucon.datageneration.domain.RateStat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public interface RateStatRepository extends JpaRepository<RateStat, Long> {
 
     @Query("SELECT new com.gugucon.datageneration.repository.SimpleRateStatDto(p.id, sum(r.score), count(r.score)) " +
