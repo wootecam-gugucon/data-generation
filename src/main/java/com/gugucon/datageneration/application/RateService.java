@@ -16,9 +16,9 @@ public class RateService {
     public int createRate(final List<Long> orderItemIds) {
         int size = orderItemIds.size();
         orderItemIds.stream()
-                    .parallel()
-                    .forEach(id -> rateGenerator.generate(id)
-                                                .ifPresent(rateRepository::save));
+                .parallel()
+                .forEach(id -> rateGenerator.generate(id)
+                        .ifPresent(rateRepository::save));
         return size;
     }
 

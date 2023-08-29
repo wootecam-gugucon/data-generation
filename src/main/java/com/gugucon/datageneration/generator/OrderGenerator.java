@@ -15,9 +15,8 @@ public class OrderGenerator {
 
     private final Random random = new Random();
 
-    public List<Order> generateOrder(final List<Long> memberIds, final int number) {
+    public List<Order> generateOrder(final List<Long> memberIds, final int number, final Order.OrderStatus[] status) {
         final int memberCount = memberIds.size();
-        final Status[] status = Status.values();
         final PayType[] payTypes = PayType.values();
 
         return IntStream.range(0, number)

@@ -15,8 +15,8 @@ public class RateGenerator {
         }
 
         return Optional.ofNullable(Rate.builder()
-                                       .orderItemId(orderItemId)
-                                       .score((short) random.nextInt(1, 6))
-                                       .build());
+                                           .orderItemId(orderItemId)
+                                           .score((short) random.nextInt(1, 6))
+                                           .build());
     }
 }

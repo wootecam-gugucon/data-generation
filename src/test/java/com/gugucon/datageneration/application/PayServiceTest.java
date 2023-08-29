@@ -45,27 +45,23 @@ class PayServiceTest {
     @Test
     void createPay() {
         // given
-        payRepository.deleteAllInBatch();
-        orderItemRepository.deleteAllInBatch();
-        orderRepository.deleteAllInBatch();
-        productRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
+//        payRepository.deleteAllInBatch();
+//        orderItemRepository.deleteAllInBatch();
+//        orderRepository.deleteAllInBatch();
+//        productRepository.deleteAllInBatch();
+//        memberRepository.deleteAllInBatch();
 
-        productService.createProduct(10000);
-        List<Product> products = productRepository.findAll();
-
-        memberService.createMember(1000);
-        List<Long> memberIds = memberRepository.findAll()
-                                               .stream()
-                                               .map(Member::getId)
-                                               .toList();
-
-        orderService.createOrder(memberIds, products, 1000);
-        List<Long> payedOrderIds = orderRepository.findAllIdByStatus(Status.COMPLETED);
-
-        List<Long> totalPrices = payedOrderIds.stream()
-                                              .map(orderItemRepository::sumPriceByOrderId)
-                                              .toList();
+//        productService.createProduct(10000);
+//        List<Product> products = productRepository.findAll();
+//
+//        memberService.createMember(1000);
+//        List<Long> memberIds = memberRepository.findAll()
+//                                               .stream()
+//                                               .map(Member::getId)
+//                                               .toList();
+//
+//        orderService.createOrder(memberIds, 1000, Status.values());
+        List<Long> payedOrderIds = orderRepository.findAllIdByStatus(Status.COMPLETED);  // 250만개
 
         // when
         int count = payService.createPay(payedOrderIds);

@@ -3,6 +3,7 @@ package com.gugucon.datageneration.application;
 import com.gugucon.datageneration.domain.Order;
 import com.gugucon.datageneration.domain.OrderItem;
 import com.gugucon.datageneration.domain.Product;
+import com.gugucon.datageneration.domain.Status;
 import com.gugucon.datageneration.generator.OrderGenerator;
 import com.gugucon.datageneration.repository.OrderItemRepository;
 import com.gugucon.datageneration.repository.OrderRepository;
@@ -18,15 +19,26 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderGenerator orderGenerator;
 
-    public int createOrder(final List<Long> memberIds, final List<Product> products, final int orderCount) {
-        List<Order> orders = orderGenerator.generateOrder(memberIds, orderCount);
+    public long createOrder(final List<Long> memberIds, final int count, final Order.OrderStatus[] statuses) {
+        List<Order> orders = orderGenerator.generateOrder(memberIds, count, statuses);
         orders.stream()
               .parallel()
               .forEach(orderRepository::save);
+
+        return orderRepository.count();
+    }
+
+    public void createOrderItem(final List<Product> products) {
         List<Long> orderIds = orderRepository.findAllId();
         orderIds.stream()
                 .parallel()
                 .forEach(orderId -> orderGenerator.generateOrderItem(orderId, products).stream().parallel().forEach(orderItemRepository::save));
-        return orderIds.size();
+    }
+
+    public void createOrderItem(final List<Product> products, long start, long end) {
+        List<Long> orderIds = orderRepository.findAllByIdBetween(start, end);
+        orderIds.stream()
+                .parallel()
+                .forEach(orderId -> orderGenerator.generateOrderItem(orderId, products).stream().parallel().forEach(orderItemRepository::save));
     }
 }

@@ -8,6 +8,7 @@ import com.gugucon.datageneration.application.OrderService;
 import com.gugucon.datageneration.application.PayService;
 import com.gugucon.datageneration.application.ProductService;
 import com.gugucon.datageneration.domain.Member;
+import com.gugucon.datageneration.domain.Order;
 import com.gugucon.datageneration.domain.Product;
 import com.gugucon.datageneration.domain.Status;
 import com.gugucon.datageneration.repository.CartItemRepository;
@@ -87,7 +88,8 @@ class DataGenerationApplicationTests {
 
         cartItemService.createCartItems(memberIds, productIds, cartItemCount);
 
-        orderService.createOrder(memberIds, products, orderCount);
+        orderService.createOrder(memberIds, orderCount, Order.OrderStatus.values());
+        orderService.createOrderItem(products);
         List<Long> payedOrderIds = orderRepository.findAllIdByStatus(Status.COMPLETED);
 
         int payCount = payService.createPay(payedOrderIds);
