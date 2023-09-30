@@ -1,26 +1,12 @@
 package com.gugucon.datageneration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import com.gugucon.datageneration.application.CartItemService;
-import com.gugucon.datageneration.application.MemberService;
-import com.gugucon.datageneration.application.OrderService;
-import com.gugucon.datageneration.application.PayService;
-import com.gugucon.datageneration.application.ProductService;
-import com.gugucon.datageneration.domain.Member;
-import com.gugucon.datageneration.domain.Order;
-import com.gugucon.datageneration.domain.Product;
-import com.gugucon.datageneration.domain.Status;
-import com.gugucon.datageneration.repository.CartItemRepository;
-import com.gugucon.datageneration.repository.MemberRepository;
-import com.gugucon.datageneration.repository.OrderItemRepository;
-import com.gugucon.datageneration.repository.OrderRepository;
-import com.gugucon.datageneration.repository.PayRepository;
-import com.gugucon.datageneration.repository.ProductRepository;
-import java.util.List;
+import com.gugucon.datageneration.application.*;
+import com.gugucon.datageneration.application.StatService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static com.gugucon.datageneration.domain.Order.OrderStatus.COMPLETED;
 
 @SpringBootTest
 class DataGenerationApplicationTests {
@@ -32,73 +18,55 @@ class DataGenerationApplicationTests {
     private MemberService memberService;
 
     @Autowired
-    private CartItemService cartItemService;
-
-    @Autowired
     private OrderService orderService;
 
     @Autowired
     private PayService payService;
 
     @Autowired
-    private ProductRepository productRepository;
+    private RateService rateService;
 
     @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private CartItemRepository cartItemRepository;
-
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-
-    @Autowired
-    private PayRepository payRepository;
+    private StatService statService;
 
     @Test
     void createAll() {
-        // given
-        payRepository.deleteAllInBatch();
-        orderItemRepository.deleteAllInBatch();
-        cartItemRepository.deleteAllInBatch();
-        orderRepository.deleteAllInBatch();
-        productRepository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
-
-        int productCount = 10_000;
-        int memberCount = 1_000;
-        int cartItemCount = memberCount * 3;
-        int orderCount = 1_000_000;
+        int productCount = 1_000;
+        int memberCount = 50_000;
+        int orderCount = 3_000_000;
+        long start;
 
         // when
+        start = System.currentTimeMillis();
         productService.createProduct(productCount);
-        List<Product> products = productRepository.findAll();
-        List<Long> productIds = products.stream()
-                                        .map(Product::getId)
-                                        .toList();
+        System.out.println("상품 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
 
+        start = System.currentTimeMillis();
         memberService.createMember(memberCount);
-        List<Long> memberIds = memberRepository.findAll()
-                                               .stream()
-                                               .map(Member::getId)
-                                               .toList();
+        System.out.println("회원 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
 
-        cartItemService.createCartItems(memberIds, productIds, cartItemCount);
+        start = System.currentTimeMillis();
+        orderService.createOrder(orderCount, COMPLETED);
+        System.out.println("주문 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
 
-        orderService.createOrder(memberIds, orderCount, Order.OrderStatus.values());
-        orderService.createOrderItem(products);
-        List<Long> payedOrderIds = orderRepository.findAllIdByStatus(Status.COMPLETED);
+        start = System.currentTimeMillis();
+        orderService.createOrderItem();
+        System.out.println("주문상품 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
 
-        int payCount = payService.createPay(payedOrderIds);
+        start = System.currentTimeMillis();
+        payService.createPay();
+        System.out.println("결제 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
 
-        // then
-        assertThat(productRepository.count()).isEqualTo(productCount);
-        assertThat(memberRepository.count()).isEqualTo(memberCount);
-        assertThat(cartItemRepository.count()).isEqualTo(cartItemCount);
-        assertThat(orderRepository.count()).isEqualTo(orderCount);
-        assertThat(payRepository.count()).isEqualTo(payCount);
+        start = System.currentTimeMillis();
+        rateService.createRate();
+        System.out.println("별점 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
+
+        start = System.currentTimeMillis();
+        statService.createRateStat();
+        System.out.println("별점 통계 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
+
+        start = System.currentTimeMillis();
+        statService.createOrderStat();
+        System.out.println("주문 통계 생성 완료, 걸린 시간 : " + (double) (System.currentTimeMillis() - start) / 1000 + "s");
     }
 }

@@ -1,11 +1,13 @@
 package com.gugucon.datageneration.generator;
 
 import com.gugucon.datageneration.domain.*;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+@Component
 public class OrderGenerator {
 
     private static final int MIN_QUANTITY = 1;
@@ -15,17 +17,15 @@ public class OrderGenerator {
 
     private final Random random = new Random();
 
-    public List<Order> generateOrder(final List<Long> memberIds, final int number, final Order.OrderStatus[] status) {
+    public Order generateOrder(final List<Long> memberIds, final Order.OrderStatus[] status) {
         final int memberCount = memberIds.size();
         final PayType[] payTypes = PayType.values();
 
-        return IntStream.range(0, number)
-                .mapToObj(i -> Order.builder()
-                        .memberId(memberIds.get(random.nextInt(memberCount)))
-                        .status(status[random.nextInt(status.length)])
-                        .payType(payTypes[random.nextInt(payTypes.length)])
-                        .build())
-                .toList();
+        return Order.builder()
+                .memberId(memberIds.get(random.nextInt(memberCount)))
+                .status(status[random.nextInt(status.length)])
+                .payType(payTypes[random.nextInt(payTypes.length)])
+                .build();
     }
 
     public List<OrderItem> generateOrderItem(final Long orderId, final List<Product> products) {

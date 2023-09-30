@@ -2,6 +2,7 @@ package com.gugucon.datageneration.repository;
 
 import com.gugucon.datageneration.domain.Gender;
 import com.gugucon.datageneration.domain.RateStat;
+import com.gugucon.datageneration.repository.dto.SimpleRateStatDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,7 @@ import java.util.List;
 @Repository
 public interface RateStatRepository extends JpaRepository<RateStat, Long> {
 
-    @Query("SELECT new com.gugucon.datageneration.repository.SimpleRateStatDto(p.id, sum(r.score), count(r.score)) " +
+    @Query("SELECT new com.gugucon.datageneration.repository.dto.SimpleRateStatDto(p.id, sum(r.score), count(r.score)) " +
             "FROM Order o " +
             "JOIN OrderItem oi ON o.id = oi.orderId " +
             "JOIN Member m ON o.memberId = m.id " +

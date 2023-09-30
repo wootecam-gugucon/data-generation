@@ -1,4 +1,4 @@
-package com.gugucon.datageneration.repository;
+package com.gugucon.datageneration.repository.dto;
 
 import lombok.Getter;
 

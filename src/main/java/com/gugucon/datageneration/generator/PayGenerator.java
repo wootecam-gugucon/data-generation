@@ -1,16 +1,14 @@
 package com.gugucon.datageneration.generator;
 
 import com.gugucon.datageneration.domain.Pay;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-
+@Component
 public class PayGenerator {
 
-    public List<Pay> generate(final List<Long> orderIds) {
-        return orderIds.stream()
-                .map(orderId -> Pay.builder()
-                        .orderId(orderId)
-                        .build())
-                .toList();
+    public Pay generate(final Long orderId) {
+        return Pay.builder()
+                .orderId(orderId)
+                .build();
     }
 }

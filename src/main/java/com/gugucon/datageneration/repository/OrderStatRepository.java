@@ -2,6 +2,7 @@ package com.gugucon.datageneration.repository;
 
 import com.gugucon.datageneration.domain.Gender;
 import com.gugucon.datageneration.domain.OrderStat;
+import com.gugucon.datageneration.repository.dto.SimpleOrderStatDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +14,7 @@ import java.util.List;
 @Repository
 public interface OrderStatRepository extends JpaRepository<OrderStat, Long> {
 
-    @Query("SELECT new com.gugucon.datageneration.repository.SimpleOrderStatDto(p.id, sum(oi.quantity)) " +
+    @Query("SELECT new com.gugucon.datageneration.repository.dto.SimpleOrderStatDto(p.id, sum(oi.quantity)) " +
             "FROM Order o " +
             "JOIN OrderItem oi ON o.id = oi.orderId " +
             "JOIN Member m ON o.memberId = m.id " +

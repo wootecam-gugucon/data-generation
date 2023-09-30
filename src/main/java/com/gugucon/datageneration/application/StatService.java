@@ -1,4 +1,4 @@
-package com.gugucon.datageneration.generator;
+package com.gugucon.datageneration.application;
 
 import com.gugucon.datageneration.domain.*;
 import com.gugucon.datageneration.repository.OrderStatRepository;
@@ -6,7 +6,6 @@ import com.gugucon.datageneration.repository.ProductRepository;
 import com.gugucon.datageneration.repository.RateStatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,15 +13,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class StatDataGenerator {
+public class StatService {
 
     private final ProductRepository productRepository;
     private final RateStatRepository rateStatRepository;
     private final OrderStatRepository orderStatRepository;
 
-    public void generateRateStatData() {
+    public void createRateStat() {
         final Set<Long> productIds = productRepository.findAll().stream()
                 .map(Product::getId)
                 .collect(Collectors.toUnmodifiableSet());
@@ -62,7 +60,7 @@ public class StatDataGenerator {
         }
     }
 
-    public void generateOrderStatData() {
+    public void createOrderStat() {
         final Set<Long> productIds = productRepository.findAll().stream()
                 .map(Product::getId)
                 .collect(Collectors.toUnmodifiableSet());

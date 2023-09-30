@@ -3,20 +3,18 @@ package com.gugucon.datageneration.generator;
 import com.gugucon.datageneration.domain.Gender;
 import com.gugucon.datageneration.domain.Member;
 import com.gugucon.datageneration.utils.RandomStringUtils;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+@Component
 public class MemberGenerator {
 
     private static final int DOMAIN_MIN_LENGTH = 5;
@@ -38,22 +36,20 @@ public class MemberGenerator {
     private final Random random = new Random();
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public List<Member> generate(final int number) {
+    public Member generate() {
         Gender[] gender = Gender.values();
         long daysBetween = ChronoUnit.DAYS.between(START_DATE, END_DATE);
 
-        return IntStream.range(0, number)
-                .mapToObj(i -> Member.builder()
-                        .email(emailGenerate())
-                        .password(passwordEncoder.encode(passwordGenerate()))
-                        .nickname(nicknameGenerate())
-                        .gender(gender[random.nextInt(gender.length)])
-                        .birthDate(START_DATE.plusDays(random.nextInt((int) daysBetween + 1)))
-                        .build())
-                .toList();
+        return Member.builder()
+                .email(generateEmail())
+                .password(passwordEncoder.encode(generatePassword()))
+                .nickname(generateNickname())
+                .gender(gender[random.nextInt(gender.length)])
+                .birthDate(START_DATE.plusDays(random.nextInt((int) daysBetween + 1)))
+                .build();
     }
 
-    private String emailGenerate() {
+    private String generateEmail() {
         String id = LocalDateTime.now().toString().replaceAll("[-:.]", "");
         String domain = RandomStringUtils.randomAlphanumeric(random.nextInt(DOMAIN_MIN_LENGTH, DOMAIN_MAX_LENGTH));
         String tld = RandomStringUtils.randomAlphabetic(random.nextInt(PROVIDER_MIN_LENGTH, PROVIDER_MAX_LENGTH));
@@ -68,7 +64,7 @@ public class MemberGenerator {
         return email;
     }
 
-    private String passwordGenerate() {
+    private String generatePassword() {
         String password = RandomStringUtils.randomAlphanumeric(random.nextInt(PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH))
                 + RandomStringUtils.randomAlphabetic(1);
         return validatePassword(password);
@@ -82,7 +78,7 @@ public class MemberGenerator {
         return password;
     }
 
-    private String nicknameGenerate() {
+    private String generateNickname() {
         return RandomStringUtils.randomAlphabetic(random.nextInt(NICKNAME_MIN_LENGTH, NICKNAME_MAX_LENGTH));
     }
 }

@@ -3,12 +3,13 @@ package com.gugucon.datageneration.application;
 import com.gugucon.datageneration.domain.Product;
 import com.gugucon.datageneration.generator.ProductGenerator;
 import com.gugucon.datageneration.repository.ProductRepository;
-import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductService {
 
     private final ProductRepository productRepository;
